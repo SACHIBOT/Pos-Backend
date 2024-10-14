@@ -2,6 +2,7 @@ package com.pos.backend.entity;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,13 +26,14 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
 
+    @Column(unique = true)
     private String itemName;
     private String description;
     private double price;
 
     @ManyToOne
     @JoinColumn(name = "item_category_id")
-    private ItemCategory itemCategory;
+    private Category itemCategory;
 
     @OneToOne(mappedBy = "item")
     private Stock stock;

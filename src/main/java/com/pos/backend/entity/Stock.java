@@ -1,5 +1,7 @@
 package com.pos.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +25,7 @@ public class Stock {
     private int quantity;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "item_id")
     private Item item;
 
