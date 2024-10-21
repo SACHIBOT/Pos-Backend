@@ -37,8 +37,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void deleteItem(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteItem'");
+        itemRepository.deleteById(id);
+    }
+
+    @Override
+    public Item getItemByName(String itemName) {
+        return itemRepository.findByItemName(itemName);
     }
 
 }

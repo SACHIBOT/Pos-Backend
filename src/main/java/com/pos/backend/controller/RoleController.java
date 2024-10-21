@@ -17,16 +17,24 @@ import com.pos.backend.service.RoleService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @CrossOrigin(origins = "*")
 @Tag(name = "Role Controller", description = "Manages role creation, retrieval, and deletion for the POS system")
 public class RoleController {
+
     @Autowired
     private RoleService roleService;
 
     @PostMapping("/roles")
     @Operation(summary = "Create a new role", description = "Creates a new role and returns the created entity.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Role successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid request, please provide a valid role name"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<?> createRole(@RequestBody RoleDto roleDto) {
         if (roleDto.getRoleName() == null || roleDto.getRoleName().isEmpty()) {
             return ResponseEntity.status(400).body("Please enter a valid role name");
@@ -39,12 +47,16 @@ public class RoleController {
             Role createdRole = roleService.createRole(role);
             return ResponseEntity.status(201).body(createdRole);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
     @GetMapping("/roles")
     @Operation(summary = "Retrieve all roles", description = "Returns a list of all available roles.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved roles"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<List<Role>> getAllRoles() {
         List<Role> roles = roleService.getAllRoles();
         return ResponseEntity.status(200).body(roles);
@@ -52,6 +64,11 @@ public class RoleController {
 
     @DeleteMapping("/roles/{id}")
     @Operation(summary = "Delete a role by ID", description = "Deletes a role with the specified ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Role successfully deleted"),
+            @ApiResponse(responseCode = "400", description = "Invalid ID provided, must be a positive number"),
+            @ApiResponse(responseCode = "404", description = "Role not found")
+    })
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         if (id == null || id <= 0) {
             return ResponseEntity.status(400).body("Invalid ID provided. ID must be a positive number.");
@@ -60,7 +77,7 @@ public class RoleController {
             roleService.deleteRole(id);
             return ResponseEntity.status(204).build();
         } catch (Exception e) {
-            return ResponseEntity.status(404).body("Role not found with ID: " + id);
+            return ResponseEntity.status(404).body("Role not found or cannot be deleted");
         }
     }
 }

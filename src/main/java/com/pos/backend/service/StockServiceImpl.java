@@ -36,14 +36,22 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public Stock updateStock(Long id, Stock stock) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteStock'");
+        Stock existingStock = stockRepository.findById(id).orElse(null);
+
+        if (existingStock == null) {
+            return null;
+        } else {
+            existingStock.setItem(stock.getItem());
+            existingStock.setQuantity(stock.getQuantity());
+            existingStock.setStockId(stock.getStockId());
+            return stockRepository.save(existingStock);
+
+        }
     }
 
     @Override
     public void deleteStock(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteStock'");
+        stockRepository.deleteById(id);
     }
 
 }
