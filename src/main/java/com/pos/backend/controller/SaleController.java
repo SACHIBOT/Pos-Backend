@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @Tag(name = "Sale Controller", description = "Manages sale creation and adding items to sales in the POS system")
@@ -33,6 +34,21 @@ public class SaleController {
 
     @Autowired
     ItemService itemService;
+
+    @GetMapping("/sale/{id}")
+    @Operation(summary = "Get Sale by ID", description = "Fetches the sale details for the given sale ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Sale successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "Sale not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> getSaleInfo(@PathVariable Long id) {
+        Sale sale = saleService.getSaleById(id);
+        if (sale == null) {
+            return ResponseEntity.status(404).body("Sale not found");
+        }
+        return ResponseEntity.status(201).body(sale);
+    }
 
     @PostMapping("/sale")
     @Operation(summary = "Create a new Sale", description = "Creates a new sale and returns the created sale entity.")
@@ -70,6 +86,7 @@ public class SaleController {
 
         try {
             SaleItem saleItem = new SaleItem();
+            saleItem.setSale(sale);
             saleItem.setPrice(itemService.getItemById(saleItemDto.getItemId()).getPrice());
             saleItem.setQuantity(saleItemDto.getQuantity());
             saleItem.setItem(itemService.getItemById(saleItemDto.getItemId()));
