@@ -31,7 +31,7 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public Stock getStockByItemId(Long itemId) {
-        return stockRepository.findByItemItemId(itemId);
+        return stockRepository.findByItemItemId(itemId).orElse(null);
     }
 
     @Override

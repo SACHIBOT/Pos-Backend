@@ -1,13 +1,11 @@
 package com.pos.backend.repository;
 
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.pos.backend.entity.Item;
+import com.pos.backend.entity.User;
 
 @Repository
-public interface ItemRepository extends JpaRepository<Item, Long> {
-    Optional<Item> findByItemName(String itemName);
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
 }

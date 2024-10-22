@@ -8,9 +8,11 @@ import com.pos.backend.dto.SaleDto;
 import com.pos.backend.dto.SaleItemDto;
 import com.pos.backend.entity.Sale;
 import com.pos.backend.entity.SaleItem;
+import com.pos.backend.entity.Item;
 import com.pos.backend.service.ItemService;
 import com.pos.backend.service.SaleItemService;
 import com.pos.backend.service.SaleService;
+import com.pos.backend.service.UserService;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +37,9 @@ public class SaleController {
     @Autowired
     ItemService itemService;
 
+    @Autowired
+    UserService userService;
+
     @GetMapping("/sale/{id}")
     @Operation(summary = "Get Sale by ID", description = "Fetches the sale details for the given sale ID.")
     @ApiResponses(value = {
@@ -47,6 +52,13 @@ public class SaleController {
         if (sale == null) {
             return ResponseEntity.status(404).body("Sale not found");
         }
+        // List<SaleItem> saleiItems = saleItemService.getSaleItemsBySaleId(id);
+        // for (int i = 0; i < saleiItems.size(); i++) {
+        // SaleItem saleItem = saleiItems.get(i);
+        // saleItem.getItem().setSales(null);
+        // saleiItems.set(i, saleItem);
+        // }
+        // sale.setSaleItems(saleiItems);
         return ResponseEntity.status(201).body(sale);
     }
 
@@ -60,7 +72,7 @@ public class SaleController {
     public ResponseEntity<?> createSale(@RequestBody SaleDto saleDto) {
         Sale sale = new Sale();
         sale.setSaleDate(saleDto.getSaleDate());
-        sale.setUserId(saleDto.getUserId());
+        sale.setUserId(userService.getUserByUserName(saleDto.getUserName()).getUserId());
 
         try {
             sale = saleService.createSale(sale);
@@ -83,13 +95,16 @@ public class SaleController {
         if (sale == null) {
             return ResponseEntity.status(404).body("Sale not found");
         }
-
+        Item item = itemService.getItemById(saleItemDto.getItemId());
+        if (item == null) {
+            return ResponseEntity.status(404).body("Item not found");
+        }
         try {
             SaleItem saleItem = new SaleItem();
             saleItem.setSale(sale);
-            saleItem.setPrice(itemService.getItemById(saleItemDto.getItemId()).getPrice());
+            saleItem.setPrice(item.getPrice());
             saleItem.setQuantity(saleItemDto.getQuantity());
-            saleItem.setItem(itemService.getItemById(saleItemDto.getItemId()));
+            saleItem.setItem(item);
 
             saleItem = saleService.addSaleItem(saleItem);
             return ResponseEntity.status(201).body(saleItem);

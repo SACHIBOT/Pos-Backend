@@ -39,6 +39,9 @@ public class SaleServiceImpl implements SaleService {
         }
 
         Stock stock = stockService.getStockByItemId(saleItem.getItem().getItemId());
+        if (stock == null) {
+            throw new Exception("Item stock not found");
+        }
         int stockQty = stock.getQuantity();
         if (stockQty < qty) {
             throw new Exception("Not enough stock");

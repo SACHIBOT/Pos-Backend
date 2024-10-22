@@ -61,7 +61,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved categories"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<?> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.status(200).body(categories);
     }

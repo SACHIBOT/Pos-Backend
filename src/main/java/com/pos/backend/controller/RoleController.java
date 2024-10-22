@@ -28,7 +28,7 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @PostMapping("/roles")
+    @PostMapping("/admin/roles")
     @Operation(summary = "Create a new role", description = "Creates a new role and returns the created entity.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Role successfully created"),
@@ -57,12 +57,12 @@ public class RoleController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved roles"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<Role>> getAllRoles() {
+    public ResponseEntity<?> getAllRoles() {
         List<Role> roles = roleService.getAllRoles();
         return ResponseEntity.status(200).body(roles);
     }
 
-    @DeleteMapping("/roles/{id}")
+    @DeleteMapping("/admin/roles/{id}")
     @Operation(summary = "Delete a role by ID", description = "Deletes a role with the specified ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Role successfully deleted"),

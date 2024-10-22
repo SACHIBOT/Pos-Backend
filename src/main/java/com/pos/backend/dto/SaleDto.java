@@ -10,5 +10,5 @@ import lombok.Setter;
 public class SaleDto {
 
     private LocalDateTime saleDate;
-    private long userId;
+    private String userName;
 }

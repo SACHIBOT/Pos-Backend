@@ -2,6 +2,9 @@ package com.pos.backend.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "items")
+@JsonIgnoreProperties({ "saleItems" })
 public class Item {
 
     @Id
@@ -39,6 +43,7 @@ public class Item {
     private Stock stock;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(name = "sale_items", joinColumns = @JoinColumn(name = "item_id"), inverseJoinColumns = @JoinColumn(name = "sale_id"))
     private List<Sale> sales;
 

@@ -40,8 +40,8 @@ public class StockController {
         return ResponseEntity.status(200).body(stock);
     }
 
-    @PutMapping("/stocks")
-    @Operation(summary = "Update stock", description = "Updates the quantity of stock for a specific item.")
+    @PutMapping("/manager/stocks")
+    @Operation(summary = "Update stock", description = "Allows a manager to update the quantity of stock for a specific item.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Stock successfully updated"),
             @ApiResponse(responseCode = "400", description = "Invalid request, please check the input values"),

@@ -16,7 +16,7 @@ public class SaleItemServiceImpl implements SaleItemService {
 
     @Override
     public List<SaleItem> getSaleItemsBySaleId(Long saleId) {
-        return saleItemRepository.findBySaleSaleId(saleId);
+        return saleItemRepository.findBySaleSaleId(saleId).orElse(null);
     }
 
     @Override
