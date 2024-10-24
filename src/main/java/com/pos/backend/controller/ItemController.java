@@ -14,6 +14,7 @@ import com.pos.backend.service.StockService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
+@CrossOrigin(origins = "*")
 @Tag(name = "Item Controller", description = "Manages item creation, retrieval, and deletion for the POS system")
 public class ItemController {
 
@@ -61,7 +63,7 @@ public class ItemController {
         return ResponseEntity.status(200).body(item);
     }
 
-    @PostMapping("/items")
+    @PostMapping("/manager/items")
     @Operation(summary = "Create a new item", description = "Creates a new item and its associated stock entry.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Item successfully created"),
@@ -106,7 +108,7 @@ public class ItemController {
         }
     }
 
-    @DeleteMapping("/items/{id}")
+    @DeleteMapping("/manager/items/{id}")
     @Operation(summary = "Delete an item by ID", description = "Deletes an item and its associated stock entry by ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Item successfully deleted"),

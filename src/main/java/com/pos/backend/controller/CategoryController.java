@@ -4,8 +4,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +29,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping("/categories")
+    @PostMapping("/manager/categories")
     @Operation(summary = "Create a new Category", description = "Creates a new category and returns the created entity.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Category successfully created"),
@@ -64,5 +67,55 @@ public class CategoryController {
     public ResponseEntity<?> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.status(200).body(categories);
+    }
+
+    @PutMapping("/manager/categories/{id}")
+    @Operation(summary = "Update an existing Category", description = "Updates an existing category based on its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Category successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid request, please provide a valid category name"),
+            @ApiResponse(responseCode = "404", description = "Category not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+        if (categoryDto.getCategoryName() == null || categoryDto.getCategoryName().isEmpty()) {
+            return ResponseEntity.status(400).body("Please enter a valid category name");
+        }
+
+        Category existingCategory = categoryService.getCategoryById(id);
+        if (existingCategory == null) {
+            return ResponseEntity.status(404).body("Category not found");
+        }
+
+        existingCategory.setCategoryName(categoryDto.getCategoryName());
+        existingCategory.setDescription(categoryDto.getDescription());
+
+        try {
+            Category updatedCategory = categoryService.updateCategory(existingCategory);
+            return ResponseEntity.status(200).body(updatedCategory);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/manager/categories/{id}")
+    @Operation(summary = "Delete a Category", description = "Deletes a category based on its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Category successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Category not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        Category existingCategory = categoryService.getCategoryById(id);
+        if (existingCategory == null) {
+            return ResponseEntity.status(404).body("Category not found");
+        }
+
+        try {
+            categoryService.deleteCategory(id);
+            return ResponseEntity.status(200).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 }

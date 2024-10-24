@@ -1,6 +1,7 @@
 package com.pos.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -31,6 +32,25 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getCategoryByCategoryName(String categryName) {
         return categoryRepository.findByCategoryName(categryName).orElse(null);
+    }
+
+    @Override
+    public Category updateCategory(Category category) {
+        Category existingCategory = categoryRepository.findById(category.getItemCategoryId()).orElse(null);
+        if (existingCategory == null) {
+            return null;
+        }
+
+        existingCategory.setCategoryName(category.getCategoryName());
+        existingCategory.setDescription(category.getDescription());
+
+        return categoryRepository.save(existingCategory);
+
+    }
+
+    @Override
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
     }
 
 }

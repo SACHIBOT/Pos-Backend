@@ -8,6 +8,7 @@ import com.pos.backend.dto.StockDto;
 import com.pos.backend.entity.Stock;
 import com.pos.backend.service.StockService;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
+@CrossOrigin(origins = "*")
 @Tag(name = "Stock Controller", description = "Manages stock retrieval and updates for items in the POS system")
 public class StockController {
 
