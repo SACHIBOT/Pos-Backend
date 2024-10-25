@@ -69,6 +69,21 @@ public class CategoryController {
         return ResponseEntity.status(200).body(categories);
     }
 
+    @GetMapping("/categories/{id}")
+    @Operation(summary = "Retrieve an category by ID", description = "Fetches an category by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Category successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "Category not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid ID provided")
+    })
+    public ResponseEntity<?> getItemByID(@PathVariable Long id) {
+        Category category = categoryService.getCategoryById(id);
+        if (category == null) {
+            return ResponseEntity.status(404).body("Category not found");
+        }
+        return ResponseEntity.status(200).body(category);
+    }
+
     @PutMapping("/manager/categories/{id}")
     @Operation(summary = "Update an existing Category", description = "Updates an existing category based on its ID.")
     @ApiResponses(value = {

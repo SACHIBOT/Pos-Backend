@@ -13,27 +13,34 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenAPIConfig {
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("POS Backend API")
-                        .version("1.0")
-                        .description("API documentation for POS Backend. \n\n" +
-                                "### Security Breakdown:\n" +
-                                "- **Public Access**: No authentication required for `/auth/**`, `/swagger-ui/**`, `/v3/**`.\n"
-                                +
-                                "- **Admin-only Access**: Requires `ADMIN` role for `/admin/**`.\n" +
-                                "- **Manager and Admin Access**: Requires `MANAGER` or `ADMIN` role for `/manager/**`.\n"
-                                +
-                                "- **Cashier, Manager and Admin Access**: Requires either `CASHIER` or `MANAGER` or `Admin` role for all other requests."))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new io.swagger.v3.oas.models.Components()
-                        .addSecuritySchemes("bearerAuth",
-                                new SecurityScheme()
-                                        .type(Type.HTTP)
-                                        .scheme("bearer")
-                                        .in(In.HEADER)
-                                        .name("Authorization")));
-    }
+        @Bean
+        public OpenAPI customOpenAPI() {
+                return new OpenAPI()
+                                .info(new Info()
+                                                .title("POS Backend API")
+                                                .version("1.0")
+                                                .description("API documentation for POS Backend. \n\n" +
+                                                                "### Security Breakdown:\n" +
+                                                                "- **Public Access**: No authentication required for `/auth/**`, `/swagger-ui/**`, `/v3/**`.\n"
+                                                                +
+                                                                "- **Admin-only Access**: Requires `ADMIN` role for `/admin/**`.\n"
+                                                                +
+                                                                "- **Manager and Admin Access**: Requires `MANAGER` or `ADMIN` role for `/manager/**`.\n"
+                                                                +
+                                                                "- **Cashier, Manager and Admin Access**: Requires either `CASHIER` or `MANAGER` or `Admin` role for all other requests.\n\n"
+                                                                +
+                                                                "### Note:\n" +
+                                                                "- To **create an admin user**, update the security configuration in `src/main/java/com/pos/backend/security/WebSecurityConfig.java` as follows:\n"
+                                                                +
+                                                                "  - **Uncomment** `anyRequest().permitAll()`.\n" +
+                                                                "  - **Comment out** other role-based request matchers."))
+                                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                                .components(new io.swagger.v3.oas.models.Components()
+                                                .addSecuritySchemes("bearerAuth",
+                                                                new SecurityScheme()
+                                                                                .type(Type.HTTP)
+                                                                                .scheme("bearer")
+                                                                                .in(In.HEADER)
+                                                                                .name("Authorization")));
+        }
 }

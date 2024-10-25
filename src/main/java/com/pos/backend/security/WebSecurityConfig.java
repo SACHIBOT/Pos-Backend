@@ -57,7 +57,8 @@ public class WebSecurityConfig {
                 .cors(cors -> cors
                         .configurationSource(request -> {
                             var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
-                            corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173")); // React frontend URL
+                            corsConfiguration.setAllowedOrigins(List.of("http://localhost:5174",
+                                    "http://localhost:5173")); // React frontend URL
                             corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                             corsConfiguration.setAllowedHeaders(List.of("*"));
                             corsConfiguration.setAllowCredentials(true);
@@ -67,11 +68,13 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         auth -> auth
-                                // .anyRequest().permitAll() // for test cases
+                                // .anyRequest().permitAll() // for create admin
                                 .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/manager/**").hasAnyRole("MANAGER", "ADMIN")
-                                .anyRequest().hasAnyRole("CASHIER", "MANAGER", "ADMIN"));
+                                .anyRequest().hasAnyRole("CASHIER", "MANAGER", "ADMIN")
+                // .anyRequest().authenticated() // for add authentication to all requests
+                );
         httpSecurity.authenticationProvider(authenticationProvider());
         httpSecurity.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

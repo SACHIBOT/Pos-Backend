@@ -1,5 +1,7 @@
 package com.pos.backend.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import com.pos.backend.service.ItemService;
 import com.pos.backend.service.StockService;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -63,6 +66,19 @@ public class ItemController {
         return ResponseEntity.status(200).body(item);
     }
 
+    @GetMapping("/items/category/{id}")
+    @Operation(summary = "Retrieve an items by Category ID", description = "Fetches an items by Category ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Items successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "Item not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid ID provided"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> getItemsByCategoryID(@PathVariable Long id) {
+        List<Item> items = itemService.getItemsByCategoryId(id);
+        return ResponseEntity.status(200).body(items);
+    }
+
     @PostMapping("/manager/items")
     @Operation(summary = "Create a new item", description = "Creates a new item and its associated stock entry.")
     @ApiResponses(value = {
@@ -100,11 +116,51 @@ public class ItemController {
             Stock stock = new Stock();
             stock.setItem(item);
             stock.setQuantity(0);
-            stockService.createStock(stock);
-
+            stock = stockService.createStock(stock);
+            item.setStock(stock);
             return ResponseEntity.status(201).body(item);
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/manager/items/{id}")
+    @Operation(summary = "Update an existing Item", description = "Updates an existing item based on its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Item successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid request, please provide a uniq Item name"),
+            @ApiResponse(responseCode = "404", description = "Item not found or category not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> updateItem(@PathVariable Long id, @RequestBody ItemDto itemDto) {
+        if (itemDto.getItemName() == null || itemDto.getItemName().isEmpty()) {
+            return ResponseEntity.status(400).body("Please enter a valid item name");
+        }
+
+        Item existingItem = itemService.getItemById(id);
+        if (existingItem == null) {
+            return ResponseEntity.status(404).body("Item not found");
+        }
+        Item existingItem2 = itemService.getItemByName(itemDto.getItemName());
+        if (existingItem2 != null && existingItem2.getItemId() != id) {
+            return ResponseEntity.status(400).body("Item name already exists. Please use uniq item name.");
+        }
+        Category category = categoryService.getCategoryById(itemDto.getItemCategoryId());
+        if (category == null) {
+            return ResponseEntity.status(404).body("Category not found. Please enter a valid Category ID.");
+
+        }
+
+        existingItem.setItemName(itemDto.getItemName());
+        existingItem.setPrice(itemDto.getPrice());
+        existingItem.setDescription(itemDto.getDescription());
+        existingItem.setItemCategory(category);
+
+        try {
+            Item updatedItem = itemService.updateItem(existingItem);
+            return ResponseEntity.status(200).body(updatedItem);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 

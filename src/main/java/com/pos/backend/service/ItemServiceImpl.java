@@ -1,5 +1,6 @@
 package com.pos.backend.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item updateItem(Long id, Item item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteItem'");
+    public Item updateItem(Item item) {
+        return itemRepository.save(item);
     }
 
     @Override
@@ -43,6 +43,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item getItemByName(String itemName) {
         return itemRepository.findByItemName(itemName).orElse(null);
+    }
+
+    @Override
+    public List<Item> getItemsByCategoryId(Long id) {
+        return itemRepository.findByItemCategoryItemCategoryId(id).orElse(Collections.emptyList());
     }
 
 }
