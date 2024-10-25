@@ -23,6 +23,7 @@ public class Stock {
     private Long stockId;
 
     private int quantity;
+    private String unit;
 
     @OneToOne
     @JsonIgnore

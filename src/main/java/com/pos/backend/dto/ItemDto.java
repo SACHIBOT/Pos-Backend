@@ -10,4 +10,5 @@ public class ItemDto {
     private String description;
     private double price;
     private Long itemCategoryId;
+    private String unit;
 }

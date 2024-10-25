@@ -117,6 +117,9 @@ public class ItemController {
             stock.setItem(item);
             stock.setQuantity(0);
             stock = stockService.createStock(stock);
+            if (itemDto.getUnit() != null) {
+                stock.setUnit(itemDto.getUnit());
+            }
             item.setStock(stock);
             return ResponseEntity.status(201).body(item);
         } catch (Exception e) {

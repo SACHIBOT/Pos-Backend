@@ -69,6 +69,9 @@ public class StockController {
                 return ResponseEntity.status(400).body("Quantity cannot be negative");
             }
             stock.setQuantity(newQty);
+            if (stockDto.getUnit() != null) {
+                stock.setUnit(stockDto.getUnit());
+            }
             Stock updatedStock = stockService.updateStock(stock.getStockId(), stock);
             return ResponseEntity.status(200).body(updatedStock);
         } catch (Exception e) {
