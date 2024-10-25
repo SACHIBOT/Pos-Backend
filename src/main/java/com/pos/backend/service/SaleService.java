@@ -12,4 +12,6 @@ public interface SaleService {
     SaleItem addSaleItem(SaleItem saleItem) throws Exception;
 
     Sale getSaleById(Long saleId);
+
+    void removeSaleItem(Long saleItemId);
 }

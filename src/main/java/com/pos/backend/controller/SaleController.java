@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
@@ -113,6 +114,23 @@ public class SaleController {
             return ResponseEntity.status(201).body(saleItem);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/sale/{saleId}/saleitem/{saleItemId}")
+    @Operation(summary = "Remove item from a Sale", description = "Removes an saleitem from an existing sale by saleitem ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sale item successfully removed"),
+            @ApiResponse(responseCode = "404", description = "Sale or item not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> removeSaleItem(@PathVariable Long saleId, @PathVariable Long saleItemId) {
+
+        try {
+            saleService.removeSaleItem(saleItemId);
+            return ResponseEntity.ok("Sale item successfully removed");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Something went wrong: " + e.getMessage());
         }
     }
 }

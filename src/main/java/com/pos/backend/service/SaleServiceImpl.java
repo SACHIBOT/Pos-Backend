@@ -61,4 +61,19 @@ public class SaleServiceImpl implements SaleService {
         return saleRepository.findById(saleId).orElse(null);
     }
 
+    @Override
+    @Transactional
+    public void removeSaleItem(Long saleItemId) {
+        SaleItem saleItem = saleItemRepository.findById(saleItemId).orElse(null);
+        if (saleItem != null) {
+
+            Sale sale = saleItem.getSale();
+            double itemTotal = saleItem.getPrice() * saleItem.getQuantity();
+            double newTotal = sale.getTotalAmount() - itemTotal;
+
+            sale.setTotalAmount(newTotal);
+            saleRepository.save(sale);
+            saleItemRepository.delete(saleItem);
+        }
+    }
 }

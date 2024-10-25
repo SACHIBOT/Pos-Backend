@@ -3,7 +3,6 @@ package com.pos.backend.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pos.backend.dto.NewUserDto;
 import com.pos.backend.dto.UserDto;
-import com.pos.backend.entity.Category;
 import com.pos.backend.entity.Role;
 import com.pos.backend.entity.User;
 import com.pos.backend.security.JwtUtils;

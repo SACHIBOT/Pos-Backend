@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.pos.backend.entity.Role;
 import com.pos.backend.entity.User;
-import com.pos.backend.repository.RoleRepository;
 import com.pos.backend.repository.UserRepository;
 
 @Service

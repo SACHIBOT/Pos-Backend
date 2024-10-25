@@ -3,6 +3,8 @@ package com.pos.backend.service;
 import com.pos.backend.entity.SaleItem;
 import com.pos.backend.repository.SaleItemRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,4 +25,14 @@ public class SaleItemServiceImpl implements SaleItemService {
     public SaleItem getSaleItem(Long id) {
         return saleItemRepository.findById(id).orElse(null);
     }
+
+    @Override
+    @Transactional
+    public void removeSaleItem(Long saleItemId) {
+        SaleItem saleItem = saleItemRepository.findById(saleItemId).orElse(null);
+        if (saleItem != null) {
+            saleItemRepository.delete(saleItem);
+        }
+    }
+
 }
