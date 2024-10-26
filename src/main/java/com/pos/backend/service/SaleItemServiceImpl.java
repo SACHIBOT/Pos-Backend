@@ -27,6 +27,11 @@ public class SaleItemServiceImpl implements SaleItemService {
     }
 
     @Override
+    public List<SaleItem> getAllSales() {
+        return saleItemRepository.findAll();
+    }
+
+    @Override
     @Transactional
     public void removeSaleItem(Long saleItemId) {
         SaleItem saleItem = saleItemRepository.findById(saleItemId).orElse(null);

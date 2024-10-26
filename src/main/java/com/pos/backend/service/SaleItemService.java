@@ -12,5 +12,7 @@ public interface SaleItemService {
 
     List<SaleItem> getSaleItemsBySaleId(Long saleId);
 
+    List<SaleItem> getAllSales();
+
     void removeSaleItem(Long saleItemId);
 }

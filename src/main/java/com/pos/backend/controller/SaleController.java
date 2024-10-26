@@ -1,5 +1,7 @@
 package com.pos.backend.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,6 +10,7 @@ import com.pos.backend.dto.SaleDto;
 import com.pos.backend.dto.SaleItemDto;
 import com.pos.backend.entity.Sale;
 import com.pos.backend.entity.SaleItem;
+import com.pos.backend.entity.Category;
 import com.pos.backend.entity.Item;
 import com.pos.backend.service.ItemService;
 import com.pos.backend.service.SaleItemService;
@@ -43,6 +46,17 @@ public class SaleController {
 
     @Autowired
     UserService userService;
+
+    @GetMapping("/manager/sales")
+    @Operation(summary = "Retrieve all Sales", description = "Returns a list of all available sales.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved sales"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> getAllSales() {
+        List<SaleItem> sales = saleItemService.getAllSales();
+        return ResponseEntity.status(200).body(sales);
+    }
 
     @GetMapping("/sale/{id}")
     @Operation(summary = "Get Sale by ID", description = "Fetches the sale details for the given sale ID.")
