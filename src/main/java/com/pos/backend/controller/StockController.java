@@ -51,9 +51,7 @@ public class StockController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<?> updateStock(@RequestBody StockDto stockDto) {
-        if (stockDto.getQuantity() <= 0) {
-            return ResponseEntity.status(400).body("Please enter a positive quantity");
-        }
+
         if (stockDto.getItemId() == null || stockDto.getItemId() <= 0) {
             return ResponseEntity.status(400).body("Invalid item ID provided. Item ID must be a positive number.");
         }
