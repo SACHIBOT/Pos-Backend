@@ -10,7 +10,6 @@ import com.pos.backend.dto.SaleDto;
 import com.pos.backend.dto.SaleItemDto;
 import com.pos.backend.entity.Sale;
 import com.pos.backend.entity.SaleItem;
-import com.pos.backend.entity.Category;
 import com.pos.backend.entity.Item;
 import com.pos.backend.service.ItemService;
 import com.pos.backend.service.SaleItemService;
@@ -54,7 +53,7 @@ public class SaleController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<?> getAllSales() {
-        List<SaleItem> sales = saleItemService.getAllSales();
+        List<Sale> sales = saleService.getAllSales();
         return ResponseEntity.status(200).body(sales);
     }
 

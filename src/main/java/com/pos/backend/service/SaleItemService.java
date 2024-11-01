@@ -12,7 +12,7 @@ public interface SaleItemService {
 
     List<SaleItem> getSaleItemsBySaleId(Long saleId);
 
-    List<SaleItem> getAllSales();
+    List<SaleItem> getAllSaleItems();
 
     void removeSaleItem(Long saleItemId);
 }

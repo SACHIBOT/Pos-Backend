@@ -27,7 +27,7 @@ public class SaleItemServiceImpl implements SaleItemService {
     }
 
     @Override
-    public List<SaleItem> getAllSales() {
+    public List<SaleItem> getAllSaleItems() {
         return saleItemRepository.findAll();
     }
 

@@ -5,6 +5,8 @@ import com.pos.backend.entity.SaleItem;
 import com.pos.backend.entity.Stock;
 import com.pos.backend.repository.SaleItemRepository;
 import com.pos.backend.repository.SaleRepository;
+
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,5 +77,10 @@ public class SaleServiceImpl implements SaleService {
             saleRepository.save(sale);
             saleItemRepository.delete(saleItem);
         }
+    }
+
+    @Override
+    public List<Sale> getAllSales() {
+        return saleRepository.findAll();
     }
 }
